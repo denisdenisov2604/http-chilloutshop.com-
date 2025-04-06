@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Избранное</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      background: #fdf5f5;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .favorites {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .favorite-item {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      width: 220px;
+      text-align: center;
+    }
+
+    .favorite-item img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .favorite-item button {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #ff5722;
+      color: white;
+      cursor: pointer;
+    }
+
+    .empty {
+      text-align: center;
+      font-size: 18px;
+      color: #777;
+      margin-top: 50px;
+    }
+
+    a.back {
+      display: block;
+      margin: 20px auto;
+      text-align: center;
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>💖 Избранные товары</h1>
+  <div class="favorites" id="favorites-list"></div>
+  <p class="empty" id="empty-text">Список избранного пуст</p>
+  <a class="back" href="index.html">← Вернуться в магазин</a>
+
+  <script>
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+
+    function saveFavorites() {
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+
+    function removeFromFavorites(id) {
+      favorites = favorites.filter(p => p.id !== id);
+      saveFavorites();
+      renderFavorites();
+    }
+
+    function renderFavorites() {
+      const container = document.getElementById("favorites-list");
+      const emptyText = document.getElementById("empty-text");
+      container.innerHTML = "";
+
+      if (favorites.length === 0) {
+        emptyText.style.display = "block";
+        return;
+      } else {
+        emptyText.style.display = "none";
+      }
+
+      favorites.forEach(product => {
+        const div = document.createElement("div");
+        div.className = "favorite-item";
+        div.innerHTML = `
+          <img src="${product.image}" alt="${product.name}" />
+          <h3>${product.name}</h3>
+          <p>${product.price}₽</p>
+          <button onclick="removeFromFavorites(${product.id})">Удалить из избранного</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    renderFavorites();
+  </script>
+</body>
+</html>
