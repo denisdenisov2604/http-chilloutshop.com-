@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHILLOUT | Главная</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #fff;
+    }
+
+    header {
+      background: #fff;
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .search-bar {
+      flex: 2;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      width: 300px;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .search-bar button {
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-left: none;
+      background: #eee;
+      cursor: pointer;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .icons {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+
+    .icons a {
+      color: #333;
+      font-size: 22px;
+      text-decoration: none;
+      position: relative;
+    }
+
+    #cartCount {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: red;
+      color: white;
+      font-size: 12px;
+      padding: 2px 5px;
+      border-radius: 50%;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      padding: 40px;
+    }
+
+    .product {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      width: 200px;
+      height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .product:hover {
+      transform: scale(1.05);
+    }
+
+    .product a {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .product img {
+      max-height: 180px;
+      object-fit: contain;
+      border-radius: 8px;
+      flex-grow: 1;
+    }
+
+    .product h3 {
+      margin: 10px 0 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo" onclick="location.href='index.html'">CHILLOUT</div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Поиск товаров..." />
+      <button onclick="searchProduct()"><i class="fas fa-search"></i></button>
+    </div>
+    <div class="icons">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i><span id="cartCount">0</span></a>
+      <a href="profile.html"><i class="fas fa-user"></i></a>
+    </div>
+  </header>
+
+  <main>
+    <div class="products">
+      <div class="product">
+        <a href="tshirts.html">
+          <img src="img/tshirts.jpg" alt="Футболки">
+          <h3>Футболки</h3>
+        </a>
+      </div>
+      <div class="product">
+        <a href="shorts.html">
+          <img src="img/shorts.jpg" alt="Шорты">
+          <h3>Шорты</h3>
+        </a>
+      </div>
+      <div class="product">
+        <a href="pants.html">
+          <img src="img/pants.jpg" alt="Штаны">
+          <h3>Штаны</h3>
+        </a>
+      </div>
+      <div class="product">
+        <a href="hats.html">
+          <img src="img/hats.jpg" alt="Шапки">
+          <h3>Шапки</h3>
+        </a>
+      </div>
+      <div class="product">
+        <a href="backpacks.html">
+          <img src="img/backpacks.jpg" alt="Рюкзаки">
+          <h3>Рюкзаки</h3>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function updateCartCount() {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const totalItems = orders.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      document.getElementById('cartCount').textContent = totalItems;
+    }
+
+    function searchProduct() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const products = document.querySelectorAll('.product');
+      products.forEach(product => {
+        const title = product.querySelector('h3').textContent.toLowerCase();
+        product.style.display = title.includes(input) ? 'block' : 'none';
+      });
+    }
+
+    updateCartCount();
+  </script>
+
+</body>
+</html>

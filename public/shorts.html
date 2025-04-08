@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CHILLOUT | Шорты</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #fff; }
+    header { background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; }
+    .logo { font-size: 28px; font-weight: bold; cursor: pointer; }
+    .icons { display: flex; gap: 20px; align-items: center; }
+    .icons a { color: #333; font-size: 22px; text-decoration: none; position: relative; }
+    #cartCount { position: absolute; top: -8px; right: -10px; background: red; color: white; font-size: 12px; padding: 2px 6px; border-radius: 50%; }
+    h1 { text-align: center; margin: 20px 0; font-size: 26px; }
+    .products { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 0 20px 40px; }
+    .product { background: #fff; border: 1px solid #ccc; border-radius: 10px; width: 200px; height: 280px; display: flex; flex-direction: column; justify-content: space-between; text-align: center; padding: 10px; }
+    .product img { width: 100%; border-radius: 8px; max-height: 200px; object-fit: contain; }
+    .product h3 { font-size: 18px; margin: 0 0 5px 0; font-weight: bold; }
+    .product button { background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">CHILLOUT</div>
+    <div class="icons">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i><span id="cartCount">0</span></a>
+      <a href="profile.html"><i class="fas fa-user"></i></a>
+    </div>
+  </header>
+
+  <h1>Шорты</h1>
+  <div class="products">
+    
+        <div class="product">
+          <img src="img/short1.jpg" alt="Шорты 1"/>
+          <h3>Шорты 1</h3>
+          <button onclick="addToCart('Шорты 1', 15)">Добавить в корзину</button>
+        </div>
+        <div class="product">
+          <img src="img/short2.jpg" alt="Шорты 2"/>
+          <h3>Шорты 2</h3>
+          <button onclick="addToCart('Шорты 2', 18)">Добавить в корзину</button>
+        </div>
+        <div class="product">
+          <img src="img/short3.jpg" alt="Шорты 3"/>
+          <h3>Шорты 3</h3>
+          <button onclick="addToCart('Шорты 3', 22)">Добавить в корзину</button>
+        </div>
+  </div>
+
+  <script>
+    function updateCartCount() {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const totalItems = orders.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      document.getElementById('cartCount').textContent = totalItems;
+    }
+
+    function addToCart(name, price) {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const existing = orders.find(item => item.name === name);
+      if (existing) { existing.quantity += 1; }
+      else { orders.push({ name, price, quantity: 1 }); }
+      localStorage.setItem('orders', JSON.stringify(orders));
+      updateCartCount();
+      alert(`${name} добавлено в корзину`);
+    }
+
+    updateCartCount();
+  </script>
+</body>
+</html>

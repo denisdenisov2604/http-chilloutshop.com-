@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Оплата</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    button {
+      background: #6772e5;
+      color: white;
+      font-size: 18px;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WXF953Q089"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-WXF953Q089');
+</script>
+
+</head>
+<body>
+  <h1>Оплатить заказ</h1>
+  <p>Сумма: <strong>25 USD</strong></p>
+  <button id="checkout-button">Оплатить</button>
+
+  <script>
+    const stripe = Stripe("pk_test_51RAipzRojTmPd7C1ls8cBZDehDvBYntBOQAGvv7QJcypMhUeJFYsa6l13H3beltVvpVW25g9VS8xAP40LIk2Q4Bx007i2LVaI8");
+
+    document.getElementById("checkout-button").addEventListener("click", () => {
+      fetch("/create-checkout-session", {
+        method: "POST"
+      })
+      .then(res => res.json())
+      .then(data => {
+        stripe.redirectToCheckout({ sessionId: data.id });
+      });
+    });
+  </script>
+</body>
+</html>
