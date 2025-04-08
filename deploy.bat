@@ -1,22 +1,12 @@
 @echo off
-REM Удалить .git из папки public, если он есть
-IF EXIST public\.git (
-    echo Удаление .git из папки public...
-    rd /s /q public\.git
-)
-
-REM Инициализация репозитория (если ещё не инициализирован)
-IF NOT EXIST .git (
-    git init
-)
-
-REM Добавление всех файлов
+echo Добавление изменений в git...
 git add .
 
-REM Коммит
-git commit -m "Deploy update"
+echo Коммит изменений...
+git commit -m "Автоматический деплой"
 
-REM Пуш в репозиторий
-git push -u origin main
+echo Отправка в репозиторий...
+git push origin master
 
+echo Деплой завершен.
 pause
