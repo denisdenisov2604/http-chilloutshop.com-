@@ -15,25 +15,22 @@ app.post("/create-checkout-session", async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: "Заказ CHILLOUT",
-            },
-            unit_amount: amount,
-          },
-          quantity: 1,
+      line_items: [{
+        price_data: {
+          currency: "usd",
+          product_data: { name: "Заказ CHILLOUT" },
+          unit_amount: amount
         },
-      ],
-      success_url: "https://chillout-shop.netlify.app/success.html",
-      cancel_url: "https://chillout-shop.netlify.app/cancel.html",
+        quantity: 1
+      }],
+      // Здесь указывай URL успеха и отмены платежа; для локальной разработки их можно задать так:
+      success_url: "http://localhost:4242/success.html",
+      cancel_url: "http://localhost:4242/cart.html"
     });
-
-    res.json({ id: session.id });
+    // Мы можем вернуть URL (если сессия создана с параметром url) или id и перенаправить на страницу оплаты
+    res.json({ id: session.id, url: session.url });
   } catch (error) {
-    console.error("Ошибка Stripe:", error);
+    console.error("Ошибка при создании сессии: ", error);
     res.status(500).json({ error: error.message });
   }
 });
