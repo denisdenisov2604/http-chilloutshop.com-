@@ -1,19 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <title>Оплата прошла успешно</title>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-WXF953Q089"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-WXF953Q089');
-</script>
-
+  <meta charset="UTF-8" />
+  <title>Спасибо за заказ</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #fff;
+    }
+    header {
+      background: #fff;
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ccc;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .search-bar {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    .search-bar input {
+      padding: 8px;
+      width: 300px;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    .search-bar button {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-left: none;
+      background: #eee;
+      cursor: pointer;
+      border-radius: 0 4px 4px 0;
+    }
+    .icons {
+      display: flex;
+      gap: 20px;
+    }
+    .icons a {
+      color: #333;
+      font-size: 22px;
+      text-decoration: none;
+      position: relative;
+    }
+    #cartCount {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: red;
+      color: white;
+      font-size: 12px;
+      padding: 2px 5px;
+      border-radius: 50%;
+    }
+    .thank-you {
+      text-align: center;
+      margin-top: 100px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
-  <h1>Спасибо за покупку!</h1>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">CHILLOUT</div>
+    <div class="search-bar">
+      <input type="text" placeholder="Поиск товаров..." />
+      <button><i class="fas fa-search"></i></button>
+    </div>
+    <div class="icons">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i><span id="cartCount">0</span></a>
+      <a href="profile.html"><i class="fas fa-user"></i></a>
+    </div>
+  </header>
+
+  <div class="thank-you">Спасибо за заказ!</div>
+
+  <script>
+    const orders = JSON.parse(localStorage.getItem("orders")) || [];
+    const totalItems = orders.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    document.getElementById("cartCount").textContent = totalItems;
+  </script>
 </body>
 </html>
