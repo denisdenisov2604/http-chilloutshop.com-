@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CHILLOUT | Bags</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body { margin: 0; font-family: sans-serif; background: #fff; }
+    header { background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; border-bottom: 1px solid #ccc; }
+    .logo { font-size: 28px; font-weight: bold; cursor: pointer; }
+    .products { display: flex; flex-wrap: wrap; justify-content: center; gap: 25px; padding: 40px; }
+    .product { background: #fff; border: 1px solid #ddd; border-radius: 10px; width: 220px; text-align: center; padding: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    .product img { max-height: 180px; width: 100%; object-fit: cover; border-radius: 8px; }
+    .add-to-cart, .buy-now { margin-top: 10px; padding: 8px 12px; background: black; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    .buy-now { background: #555; }
+    .cart-sidebar { position: fixed; top: 0; right: 0; width: 300px; height: 100%; background: #fff; box-shadow: -3px 0 15px rgba(0,0,0,0.2); padding: 20px; display: none; flex-direction: column; gap: 10px; z-index: 1000; }
+    .cart-sidebar.active { display: flex; }
+    .cart-header { display: flex; justify-content: space-between; align-items: center; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; }
+    .remove-item { background: none; border: none; color: red; font-size: 16px; cursor: pointer; }
+    .close-cart { background: none; border: none; font-size: 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="location.href='index.html'">CHILLOUT</div>
+    <button onclick="toggleCart()"><i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span></button>
+  </header>
+  <main>
+    <div class="products">
+        <div class="product">
+          <img src="img/bag1.jpg" alt="Сумка Mini">
+          <h3>Сумка Mini</h3>
+          <p>1990 ₽</p>
+          <button class="add-to-cart" onclick="addToCart('Сумка Mini', 1990)">Добавить в корзину</button>
+          <button class="buy-now" onclick="buyNow('Сумка Mini', 1990)">Купить сейчас</button>
+        </div>
+        
+        <div class="product">
+          <img src="img/bag2.jpg" alt="Сумка CHILLOUT">
+          <h3>Сумка CHILLOUT</h3>
+          <p>2490 ₽</p>
+          <button class="add-to-cart" onclick="addToCart('Сумка CHILLOUT', 2490)">Добавить в корзину</button>
+          <button class="buy-now" onclick="buyNow('Сумка CHILLOUT', 2490)">Купить сейчас</button>
+        </div>
+        </div>
+  </main>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Корзина</h3>
+      <button class="close-cart" onclick="toggleCart()">&times;</button>
+    </div>
+    <div id="cartItems"></div>
+    <p>Добавить брелок? <button onclick="window.location.href='keychains.html'">+ Брелок</button></p>
+    <button class="buy-now" onclick="checkout()">Оформить заказ</button>
+  </div>
+  <script>
+    const cartItems = [];
+    function updateCartDisplay() {
+      const container = document.getElementById('cartItems');
+      container.innerHTML = '';
+      let count = 0;
+      cartItems.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `<span>${item.name}</span><span>${item.price} ₽</span><button class='remove-item' onclick='removeItem(${index})'>&times;</button>`;
+        container.appendChild(div);
+        count++;
+      });
+      document.getElementById('cartCount').textContent = count;
+    }
+    function addToCart(name, price) {
+      cartItems.push({ name, price });
+      updateCartDisplay();
+      document.getElementById('cartSidebar').classList.add('active');
+    }
+    function buyNow(name, price) {
+      addToCart(name, price);
+      window.location.href = 'checkout.html';
+    }
+    function toggleCart() {
+      document.getElementById('cartSidebar').classList.toggle('active');
+    }
+    function checkout() {
+      window.location.href = 'checkout.html';
+    }
+    function removeItem(index) {
+      cartItems.splice(index, 1);
+      updateCartDisplay();
+    }
+  </script>
+</body>
+</html>

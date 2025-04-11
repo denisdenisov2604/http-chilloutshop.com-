@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CHILLOUT | Главная</title>
+  <title>CHILLOUT | Худи</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://js.stripe.com/v3/"></script>
   <style>
@@ -89,13 +89,13 @@
       background: #fff;
       border: 1px solid #ddd;
       border-radius: 10px;
-      width: 200px;
-      height: 280px;
+      width: 220px;
+      height: 350px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       text-align: center;
-      padding: 10px;
+      padding: 15px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
       transition: transform 0.3s ease;
     }
@@ -127,6 +127,20 @@
       color: #333;
     }
 
+    .product button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .product button.buy-now {
+      background: #555;
+    }
+
     @media (max-width: 600px) {
       .search-bar input {
         width: 100%;
@@ -156,37 +170,26 @@
   <main>
     <div class="products">
       <div class="product">
-        <a href="tshirts.html">
-          <img src="img/tshirts.jpg" alt="Футболки">
-          <h3>Футболки</h3>
+        <a href="product-details.html">
+          <img src="img/hoodie1.jpg" alt="Худи Classic">
+          <h3>Худи Classic</h3>
+          <p>2490 ₽</p>
         </a>
+        <button class="add-to-cart" onclick="addToCart('Худи Classic', 2490)">Добавить в корзину</button>
+        <button class="buy-now" onclick="buyNow('Худи Classic', 2490)">Оформить заказ</button>
       </div>
+
       <div class="product">
-        <a href="shorts.html">
-          <img src="img/shorts.jpg" alt="Шорты">
-          <h3>Шорты</h3>
+        <a href="product-details.html">
+          <img src="img/hoodie2.jpg" alt="Худи Summer Vibe">
+          <h3>Худи Summer Vibe</h3>
+          <p>2790 ₽</p>
         </a>
+        <button class="add-to-cart" onclick="addToCart('Худи Summer Vibe', 2790)">Добавить в корзину</button>
+        <button class="buy-now" onclick="buyNow('Худи Summer Vibe', 2790)">Оформить заказ</button>
       </div>
-      <div class="product">
-        <a href="pants.html">
-          <img src="img/pants.jpg" alt="Штаны">
-          <h3>Штаны</h3>
-        </a>
-      </div>
-      <!-- Худи -->
-      <div class="product">
-        <a href="hoodies.html">
-          <img src="img/hoodies.jpg" alt="Худи">
-          <h3>Худи</h3>
-        </a>
-      </div>
-      <!-- Брелки -->
-      <div class="product">
-        <a href="keychains.html">
-          <img src="img/keychains.jpg" alt="Брелки">
-          <h3>Брелки</h3>
-        </a>
-      </div>
+
+      <!-- Добавьте дополнительные товары здесь -->
     </div>
   </main>
 
@@ -204,6 +207,24 @@
         const title = product.querySelector('h3').textContent.toLowerCase();
         product.style.display = title.includes(input) ? 'block' : 'none';
       });
+    }
+
+    function addToCart(name, price) {
+      const orders = JSON.parse(localStorage.getItem('orders')) || [];
+      const existingItem = orders.find(item => item.name === name);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        orders.push({ name, price, quantity: 1 });
+      }
+      localStorage.setItem('orders', JSON.stringify(orders));
+      updateCartCount();
+      alert(`${name} добавлен в корзину!`);
+    }
+
+    function buyNow(name, price) {
+      addToCart(name, price);
+      window.location.href = 'checkout.html'; // Перенаправление на страницу оформления заказа
     }
 
     updateCartCount();

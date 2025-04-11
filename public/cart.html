@@ -5,14 +5,12 @@
   <title>CHILLOUT | Корзина</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://js.stripe.com/v3/"></script>
-
   <style>
     body {
       font-family: sans-serif;
       margin: 0;
       background: #f4f4f4;
     }
-
     header {
       background: #fff;
       padding: 15px 30px;
@@ -21,26 +19,21 @@
       justify-content: space-between;
       border-bottom: 1px solid #ccc;
     }
-
     .logo {
       font-size: 28px;
       font-weight: bold;
       cursor: pointer;
-      flex: 1;
     }
-
     .icons {
       display: flex;
       gap: 20px;
     }
-
     .icons a {
       color: #333;
       font-size: 22px;
       text-decoration: none;
       position: relative;
     }
-
     #cartCount {
       position: absolute;
       top: -8px;
@@ -51,13 +44,11 @@
       padding: 2px 6px;
       border-radius: 50%;
     }
-
     .container {
       padding: 20px;
       max-width: 900px;
       margin: auto;
     }
-
     .cart-item {
       background: #fff;
       display: flex;
@@ -68,11 +59,6 @@
       border-radius: 8px;
       margin-bottom: 15px;
     }
-
-    .cart-item-info {
-      flex: 1;
-    }
-
     .cart-item button {
       background: red;
       color: white;
@@ -81,14 +67,12 @@
       border-radius: 4px;
       cursor: pointer;
     }
-
     .total {
       text-align: right;
       font-size: 18px;
       font-weight: bold;
       margin-top: 20px;
     }
-
     .checkout-button {
       background: #28a745;
       color: white;
@@ -100,7 +84,6 @@
       display: block;
       margin: 20px auto 0;
     }
-
     .empty {
       text-align: center;
       font-size: 18px;
@@ -140,7 +123,7 @@
       let count = 0;
 
       if (orders.length === 0) {
-        cartItemsContainer.innerHTML = `<p class="empty">Корзина пуста</p>`;
+        cartItemsContainer.innerHTML = "<p class='empty'>Корзина пуста</p>";
         totalAmountEl.textContent = "";
         cartCountEl.textContent = "0";
         return;
@@ -150,24 +133,26 @@
         const name = item.name || "Товар";
         const price = parseFloat(item.price);
         const quantity = parseInt(item.quantity || 1);
-        const subtotal = price * quantity;
 
-        const itemDiv = document.createElement("div");
-        itemDiv.className = "cart-item";
-        itemDiv.innerHTML = `
-          <div class="cart-item-info">
+        if (isNaN(price) || isNaN(quantity) || quantity <= 0) return;
+
+        const subtotal = price * quantity;
+        total += subtotal;
+        count += quantity;
+
+        const itemEl = document.createElement("div");
+        itemEl.className = "cart-item";
+        itemEl.innerHTML = `
+          <div>
             <strong>${name}</strong><br>
-            $${price.toFixed(2)} × ${quantity}
+            ${quantity} × $${price.toFixed(2)}
           </div>
           <div>
-            <strong>$${subtotal.toFixed(2)}</strong><br>
+            $${subtotal.toFixed(2)}<br>
             <button onclick="removeItem(${index})">Удалить</button>
           </div>
         `;
-        cartItemsContainer.appendChild(itemDiv);
-
-        total += subtotal;
-        count += quantity;
+        cartItemsContainer.appendChild(itemEl);
       });
 
       totalAmountEl.textContent = `Итого: $${total.toFixed(2)}`;
@@ -193,8 +178,16 @@
         })
       })
       .then(res => res.json())
-      .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
-      .catch(err => alert("Ошибка при оплате: " + err.message));
+      .then(data => {
+        if (data.sessionId) {
+          stripe.redirectToCheckout({ sessionId: data.sessionId });
+        } else {
+          alert("Ошибка создания сессии оплаты");
+        }
+      })
+      .catch(err => {
+        alert("Ошибка: " + err.message);
+      });
     });
 
     renderCart();

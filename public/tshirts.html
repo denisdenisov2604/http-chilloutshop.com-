@@ -1,54 +1,197 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CHILLOUT | Футболки</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://js.stripe.com/v3/"></script>
   <style>
-    body { margin: 0; font-family: sans-serif; background: #fff; }
-    header { background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ccc; }
-    .logo { font-size: 28px; font-weight: bold; cursor: pointer; }
-    .icons { display: flex; gap: 20px; align-items: center; }
-    .icons a { color: #333; font-size: 22px; text-decoration: none; position: relative; }
-    #cartCount { position: absolute; top: -8px; right: -10px; background: red; color: white; font-size: 12px; padding: 2px 6px; border-radius: 50%; }
-    h1 { text-align: center; margin: 20px 0; font-size: 26px; }
-    .products { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; padding: 0 20px 40px; }
-    .product { background: #fff; border: 1px solid #ccc; border-radius: 10px; width: 200px; height: 280px; display: flex; flex-direction: column; justify-content: space-between; text-align: center; padding: 10px; }
-    .product img { width: 100%; border-radius: 8px; max-height: 200px; object-fit: contain; }
-    .product h3 { font-size: 18px; margin: 0 0 5px 0; font-weight: bold; }
-    .product button { background: #28a745; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #fff;
+    }
+
+    header {
+      background: #fff;
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .search-bar {
+      flex: 2;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      width: 300px;
+      border-radius: 4px 0 0 4px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    .search-bar button {
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-left: none;
+      background: #eee;
+      cursor: pointer;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .icons {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+
+    .icons a {
+      color: #333;
+      font-size: 22px;
+      text-decoration: none;
+      position: relative;
+    }
+
+    #cartCount {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: red;
+      color: white;
+      font-size: 12px;
+      padding: 2px 5px;
+      border-radius: 50%;
+    }
+
+    .products {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      padding: 40px;
+    }
+
+    .product {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      width: 220px;
+      height: 350px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+      padding: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .product:hover {
+      transform: scale(1.05);
+    }
+
+    .product a {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .product img {
+      max-height: 180px;
+      object-fit: contain;
+      border-radius: 8px;
+      flex-grow: 1;
+    }
+
+    .product h3 {
+      margin: 10px 0 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .product button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .product button.buy-now {
+      background: #555;
+    }
+
+    @media (max-width: 600px) {
+      .search-bar input {
+        width: 100%;
+      }
+
+      .product {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
   </style>
 </head>
 <body>
+
   <header>
     <div class="logo" onclick="location.href='index.html'">CHILLOUT</div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Поиск товаров..." />
+      <button onclick="searchProduct()"><i class="fas fa-search"></i></button>
+    </div>
     <div class="icons">
       <a href="cart.html"><i class="fas fa-shopping-cart"></i><span id="cartCount">0</span></a>
       <a href="profile.html"><i class="fas fa-user"></i></a>
     </div>
   </header>
 
-  <h1>Футболки</h1>
-  <div class="products">
-    
-        <div class="product">
-          <img src="img/tshirt1.jpg" alt="Футболки 1"/>
-          <h3>Футболки 1</h3>
-          <button onclick="addToCart('Футболки 1', 20)">Добавить в корзину</button>
-        </div>
-        <div class="product">
-          <img src="img/tshirt2.jpg" alt="Футболки 2"/>
-          <h3>Футболки 2</h3>
-          <button onclick="addToCart('Футболки 2', 25)">Добавить в корзину</button>
-        </div>
-        <div class="product">
-          <img src="img/tshirt3.jpg" alt="Футболки 3"/>
-          <h3>Футболки 3</h3>
-          <button onclick="addToCart('Футболки 3', 30)">Добавить в корзину</button>
-        </div>
-  </div>
+  <main>
+    <div class="products">
+      <div class="product">
+        <a href="product-details.html">
+          <img src="img/tshirt1.jpg" alt="Футболка Classic">
+          <h3>Футболка Classic</h3>
+          <p>1490 ₽</p>
+        </a>
+        <button class="add-to-cart" onclick="addToCart('Футболка Classic', 1490)">Добавить в корзину</button>
+        <button class="buy-now" onclick="buyNow('Футболка Classic', 1490)">Оформить заказ</button>
+      </div>
+
+      <div class="product">
+        <a href="product-details.html">
+          <img src="img/tshirt2.jpg" alt="Футболка Summer Vibe">
+          <h3>Футболка Summer Vibe</h3>
+          <p>1790 ₽</p>
+        </a>
+        <button class="add-to-cart" onclick="addToCart('Футболка Summer Vibe', 1790)">Добавить в корзину</button>
+        <button class="buy-now" onclick="buyNow('Футболка Summer Vibe', 1790)">Оформить заказ</button>
+      </div>
+
+      <!-- Добавьте дополнительные товары здесь -->
+    </div>
+  </main>
 
   <script>
     function updateCartCount() {
@@ -57,17 +200,35 @@
       document.getElementById('cartCount').textContent = totalItems;
     }
 
+    function searchProduct() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const products = document.querySelectorAll('.product');
+      products.forEach(product => {
+        const title = product.querySelector('h3').textContent.toLowerCase();
+        product.style.display = title.includes(input) ? 'block' : 'none';
+      });
+    }
+
     function addToCart(name, price) {
       const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      const existing = orders.find(item => item.name === name);
-      if (existing) { existing.quantity += 1; }
-      else { orders.push({ name, price, quantity: 1 }); }
+      const existingItem = orders.find(item => item.name === name);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        orders.push({ name, price, quantity: 1 });
+      }
       localStorage.setItem('orders', JSON.stringify(orders));
       updateCartCount();
-      alert(`${name} добавлено в корзину`);
+      alert(`${name} добавлен в корзину!`);
+    }
+
+    function buyNow(name, price) {
+      addToCart(name, price);
+      window.location.href = 'checkout.html'; // Перенаправление на страницу оформления заказа
     }
 
     updateCartCount();
   </script>
+
 </body>
 </html>
